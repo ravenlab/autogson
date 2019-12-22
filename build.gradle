@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'eclipse'
+	id 'jacoco'
 	id 'idea'
 }
 
