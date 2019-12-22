@@ -1,6 +1,7 @@
 package com.github.ravenlab.autogson.test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -38,6 +39,21 @@ public class AutoGsonTest {
 		catch (JsonSyntaxException | ClassNotFoundException e) 
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	@Test(expected = JsonSyntaxException.class)
+	public void testInvalidJsonDeserialize() throws JsonSyntaxException
+	{
+		Gson gson = new Gson();
+		String json = "{foo/thing}";
+		try 
+		{
+			AutoGson.deserialize(gson, json);
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			fail("Class not found exception was thrown");
 		}
 	}
 }
