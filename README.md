@@ -7,13 +7,13 @@ A small utility for automatic casting to and from json using [gson](https://gith
 You will need [gson](https://github.com/google/gson) in your class path as autogson does not include it.
 
 ```java
-	//Create a gson instance
+//Create a gson instance
 
-	//To get json
-	String json = AutoGson.toJson(gson, object);
+//To get json
+String json = AutoGson.toJson(gson, object);
 	
-	//From json
-	FooBar bar = AutoGson.fromJson(gson, json);
+//From json
+FooBar bar = AutoGson.fromJson(gson, json);
 ```
 
 ## How
