@@ -44,6 +44,9 @@ jobs:
     - source install-jdk.sh --url https://cdn.azul.com/zulu/bin/zulu10.3+5-jdk10.0.2-linux_x64.tar.gz
     - ./gradlew test
 
+after_success:
+- bash <(curl -s https://codecov.io/bash)
+
 after_script:
 - echo JAVA_HOME = ${JAVA_HOME}
 - echo PATH = ${PATH}
