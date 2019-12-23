@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ravenlab/autogson.svg?branch=master)](https://travis-ci.org/ravenlab/autogson)
 [![codecov](https://codecov.io/gh/ravenlab/autogson/branch/master/graph/badge.svg)](https://codecov.io/gh/ravenlab/autogson)
+[![](https://jitpack.io/v/ravenlab/autogson.svg)](https://jitpack.io/#ravenlab/autogson)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 A utility for automatic conversion to and from json using [gson.](https://github.com/google/gson)
@@ -18,6 +19,33 @@ String json = AutoGson.toJson(gson, object);
 	
 //From json
 FooBar bar = AutoGson.fromJson(gson, json);
+```
+
+### Gradle
+
+``` groovy
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+
+compile 'com.github.ravenlab:autogson:1.0.0'
+```
+
+### Maven
+
+``` xml
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+
+<dependency>
+	<groupId>com.github.ravenlab</groupId>
+	<artifactId>autogson</artifactId>
+	<version>1.0.0</version>
+</dependency>
 ```
 
 ## How
