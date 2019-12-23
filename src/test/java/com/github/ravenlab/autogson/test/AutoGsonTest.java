@@ -53,6 +53,7 @@ public class AutoGsonTest {
 		} 
 		catch (ClassNotFoundException e) 
 		{
+			e.printStackTrace();
 			fail("Class not found exception was thrown");
 		}
 	}
