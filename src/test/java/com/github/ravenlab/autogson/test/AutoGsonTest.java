@@ -6,8 +6,10 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import com.github.ravenlab.AutoGson;
-import com.github.ravenlab.autogson.test.obj.FooBar;
-import com.github.ravenlab.autogson.test.obj.FooBarChild;
+import com.github.ravenlab.autogson.test.foo.FooBar;
+import com.github.ravenlab.autogson.test.foo.FooBarChild;
+import com.github.ravenlab.autogson.test.foo.data.ExtraFooData;
+import com.github.ravenlab.autogson.test.foo.data.FooData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -71,6 +73,47 @@ public class AutoGsonTest {
 			FooBar foo = AutoGson.fromJson(gson, json);
 			assertTrue(foo instanceof FooBarChild);
 			assertTrue(foo instanceof FooBar);
+		} 
+		catch (JsonSyntaxException | ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+			fail("Class not found or an issue with the original json");
+		}
+	}
+	
+	@Test
+	public void testInnerCustomClass()
+	{
+		FooBar child = new FooBarChild();
+		Gson gson = new Gson();
+		String json = AutoGson.toJson(gson, child);
+		
+		try 
+		{
+			FooBarChild foo = AutoGson.fromJson(gson, json);
+			String data = foo.getData().getData();
+			assertTrue(data.equals("somedata"));
+		} 
+		catch (JsonSyntaxException | ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+			fail("Class not found or an issue with the original json");
+		}
+	}
+	
+	@Test
+	public void testInnerCustomClassChild()
+	{
+		FooBar child = new FooBarChild();
+		Gson gson = new Gson();
+		String json = AutoGson.toJson(gson, child);
+		
+		try 
+		{
+			FooBarChild foo = AutoGson.fromJson(gson, json);
+			FooData<String> fooData = foo.getData();
+			System.out.println(fooData.getClass().getName());
+			assertTrue(fooData instanceof ExtraFooData);
 		} 
 		catch (JsonSyntaxException | ClassNotFoundException e) 
 		{

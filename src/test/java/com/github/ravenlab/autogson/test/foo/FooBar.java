@@ -1,4 +1,4 @@
-package com.github.ravenlab.autogson.test.obj;
+package com.github.ravenlab.autogson.test.foo;
 
 public class FooBar {
 
