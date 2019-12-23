@@ -1,6 +1,10 @@
 # autogson
- 
-A small utility for automatic casting to and from json using [gson](https://github.com/google/gson).
+
+[![Build Status](https://travis-ci.org/ravenlab/autogson.svg?branch=master)](https://travis-ci.org/ravenlab/autogson)
+[![codecov](https://codecov.io/gh/ravenlab/autogson/branch/master/graph/badge.svg)](https://codecov.io/gh/ravenlab/autogson)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+A utility for automatic conversion to and from json using [gson.](https://github.com/google/gson)
 
 ## Using
 
