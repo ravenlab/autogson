@@ -15,25 +15,25 @@ import com.google.gson.JsonSyntaxException;
 public class AutoGsonTest {
 
 	@Test
-	public void testSerialize()
+	public void testToJson()
 	{
 		Gson gson = new Gson();
 		FooBar foo = new FooBar();
-		String json = AutoGson.serialize(gson, foo);
+		String json = AutoGson.toJson(gson, foo);
 		JsonObject obj = gson.fromJson(json, JsonObject.class);
 		String autoGsonClass = obj.get(AutoGson.AUTO_GSON_CLASS).getAsString();
 		assertTrue(autoGsonClass.equals(FooBar.class.getName()));
 	}
 	
 	@Test
-	public void testDeserialize()
+	public void testFromJson()
 	{
 		Gson gson = new Gson();
 		FooBar orginalFoo = new FooBar();
-		String json = AutoGson.serialize(gson, orginalFoo);
+		String json = AutoGson.toJson(gson, orginalFoo);
 		try 
 		{
-			FooBar fooBar = AutoGson.deserialize(gson, json);
+			FooBar fooBar = AutoGson.fromJson(gson, json);
 			String foo = fooBar.getFoo();
 			assertTrue(foo.equals("bar"));
 		} 
@@ -50,7 +50,7 @@ public class AutoGsonTest {
 		String json = "{foo/thing}";
 		try 
 		{
-			AutoGson.deserialize(gson, json);
+			AutoGson.fromJson(gson, json);
 		} 
 		catch (ClassNotFoundException e) 
 		{
@@ -64,11 +64,11 @@ public class AutoGsonTest {
 	{
 		FooBar child = new FooBarChild();
 		Gson gson = new Gson();
-		String json = AutoGson.serialize(gson, child);
+		String json = AutoGson.toJson(gson, child);
 		
 		try 
 		{
-			FooBar foo = AutoGson.deserialize(gson, json);
+			FooBar foo = AutoGson.fromJson(gson, json);
 			assertTrue(foo instanceof FooBarChild);
 			assertTrue(foo instanceof FooBar);
 		} 

@@ -11,7 +11,7 @@ public final class AutoGson {
 	
 	public static String AUTO_GSON_CLASS = "auto_gson_class";
 	
-	public static String serialize(Gson gson, Object obj)
+	public static String toJson(Gson gson, Object obj)
 	{
 		JsonElement element = gson.toJsonTree(obj);
 		JsonObject jsonObject = element.getAsJsonObject();
@@ -22,7 +22,7 @@ public final class AutoGson {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(Gson gson, String json) throws JsonSyntaxException, ClassNotFoundException
+	public static <T> T fromJson(Gson gson, String json) throws JsonSyntaxException, ClassNotFoundException
 	{
 		try
 		{
