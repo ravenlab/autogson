@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.github.ravenlab.AutoGson;
 import com.github.ravenlab.autogson.test.obj.FooBar;
+import com.github.ravenlab.autogson.test.obj.FooBarChild;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -55,6 +56,26 @@ public class AutoGsonTest {
 		{
 			e.printStackTrace();
 			fail("Class not found exception was thrown");
+		}
+	}
+	
+	@Test
+	public void testInheritance()
+	{
+		FooBar child = new FooBarChild();
+		Gson gson = new Gson();
+		String json = AutoGson.serialize(gson, child);
+		
+		try 
+		{
+			FooBar foo = AutoGson.deserialize(gson, json);
+			assertTrue(foo instanceof FooBarChild);
+			assertTrue(foo instanceof FooBar);
+		} 
+		catch (JsonSyntaxException | ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+			fail("Class not found or an issue with the original json");
 		}
 	}
 }
