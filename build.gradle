@@ -21,7 +21,7 @@ shadowJar {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-	testImplementation 'com.google.code.gson:gson:2.8.5'
+	compileOnly 'com.google.code.gson:gson:2.8.5'
 }
 
 jacocoTestReport {
