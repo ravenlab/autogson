@@ -96,11 +96,71 @@ public class AutoGsonTest {
 		try {
 			FooBarChild foo = autoGson.fromJson(gson, json);
 			FooData<String> fooData = foo.getData();
-			System.out.println(fooData.getClass().getName());
 			assertTrue(fooData instanceof ExtraFooData);
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 			fail("Class not found or an issue with the original json");
 		}
+	}
+	
+	@Test
+	public void testRefactoredClass() {
+		Gson gson = new Gson();
+		FooBar foo = new FooBar();
+		AutoGson autoGson = new AutoGson.Builder().build();
+		String json = autoGson.toJson(gson, foo);
+		JsonObject obj = gson.fromJson(json, JsonObject.class);
+		String className = obj.get(AutoGson.AUTO_GSON_CLASS).getAsString();
+		String refactoredClassName = "refactored." + className;
+		obj.remove(AutoGson.AUTO_GSON_CLASS);
+		obj.addProperty(AutoGson.AUTO_GSON_CLASS, refactoredClassName);
+		String newJson = obj.toString();
+		AutoGson newAutoGson = new AutoGson
+				.Builder()
+				.addRefactoredClass(refactoredClassName, className)
+				.build();
+		FooBar newFoo = newAutoGson.fromJson(gson, newJson);
+		assertTrue(obj.get(AutoGson.AUTO_GSON_CLASS).getAsString().equals(refactoredClassName));
+		assertTrue(newFoo != null);
+	}
+	
+	@Test
+	public void testNoRefactoredClass() {
+		Gson gson = new Gson();
+		FooBar foo = new FooBar();
+		AutoGson autoGson = new AutoGson.Builder().build();
+		String json = autoGson.toJson(gson, foo);
+		JsonObject obj = gson.fromJson(json, JsonObject.class);
+		String className = obj.get(AutoGson.AUTO_GSON_CLASS).getAsString();
+		String refactoredClassName = "refactored." + className;
+		obj.remove(AutoGson.AUTO_GSON_CLASS);
+		obj.addProperty(AutoGson.AUTO_GSON_CLASS, refactoredClassName);
+		String newJson = obj.toString();
+		AutoGson newAutoGson = new AutoGson
+				.Builder()
+				.build();
+		FooBar newFoo = newAutoGson.fromJson(gson, newJson);
+		assertTrue(newFoo == null);
+	}
+	
+	@Test
+	public void testDoesNotExistClass() {
+		Gson gson = new Gson();
+		FooBar foo = new FooBar();
+		AutoGson autoGson = new AutoGson.Builder().build();
+		String json = autoGson.toJson(gson, foo);
+		JsonObject obj = gson.fromJson(json, JsonObject.class);
+		String className = obj.get(AutoGson.AUTO_GSON_CLASS).getAsString();
+		String refactoredClassName = "refactored." + className;
+		String refactoredDoesNotExistClassName = refactoredClassName + "DoesNotExist";
+		obj.remove(AutoGson.AUTO_GSON_CLASS);
+		obj.addProperty(AutoGson.AUTO_GSON_CLASS, refactoredDoesNotExistClassName);
+		String newJson = obj.toString();
+		AutoGson newAutoGson = new AutoGson
+				.Builder()
+				.addRefactoredClass(refactoredClassName, refactoredDoesNotExistClassName)
+				.build();
+		FooBar newFoo = newAutoGson.fromJson(gson, newJson);
+		assertTrue(newFoo == null);
 	}
 }

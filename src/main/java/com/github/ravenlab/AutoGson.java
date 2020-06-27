@@ -34,16 +34,14 @@ public class AutoGson {
 			JsonElement classElement = jsonObject.get(AUTO_GSON_CLASS);
 			String className = classElement.getAsString();
 			Class<?> clazz = null;
-			try {
-				if(this.classExists(className)) {
-					clazz = Class.forName(className);
-				} else {
-					String refactoredClassName = this.refactored.get(className);
-					if(refactoredClassName != null && this.classExists(refactoredClassName)) {
-						clazz = Class.forName(refactoredClassName);
-					}
+			if(this.classExists(className)) {
+				clazz = this.getClass(className);
+			} else {
+				String refactoredClassName = this.refactored.get(className);
+				if(this.classExists(refactoredClassName)) {
+					clazz = this.getClass(refactoredClassName);
 				}
-			} catch (ClassNotFoundException e) {}
+			}
 
 			if(clazz == null) {
 				return null;
@@ -58,13 +56,19 @@ public class AutoGson {
 		}
 	}
 	
-	private boolean classExists(String className) {
-		try {
-			Class.forName(className);
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+	private Class<?> getClass(String className) {
+		if(className == null) {
+			return null;
 		}
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+	
+	private boolean classExists(String className) {
+		return getClass(className) != null;
 	}
 	
 	public static class Builder {
