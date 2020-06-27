@@ -1,6 +1,6 @@
 # autogson
 
-[![Build Status](https://travis-ci.org/ravenlab/autogson.svg?branch=master)](https://travis-ci.org/ravenlab/autogson)
+![build](https://github.com/ravenlab/autogson/workflows/build/badge.svg)
 [![codecov](https://codecov.io/gh/ravenlab/autogson/branch/master/graph/badge.svg)](https://codecov.io/gh/ravenlab/autogson)
 [![](https://jitpack.io/v/ravenlab/autogson.svg)](https://jitpack.io/#ravenlab/autogson)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
