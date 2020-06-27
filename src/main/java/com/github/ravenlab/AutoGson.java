@@ -1,18 +1,24 @@
 package com.github.ravenlab;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-public final class AutoGson {
+public class AutoGson {
 	
-	private AutoGson() {}
+	public static final String AUTO_GSON_CLASS = "auto_gson_class";
 	
-	public static String AUTO_GSON_CLASS = "auto_gson_class";
+	private Map<String, String> refactored;
 	
-	public static String toJson(Gson gson, Object obj)
-	{
+	private AutoGson(Map<String, String> refactored) {
+		this.refactored = refactored;
+	}
+	
+	public String toJson(Gson gson, Object obj) {
 		JsonElement element = gson.toJsonTree(obj);
 		JsonObject jsonObject = element.getAsJsonObject();
 		String className = obj.getClass().getName();
@@ -20,24 +26,62 @@ public final class AutoGson {
 		String json = gson.toJson(jsonObject);
 		return json;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <T> T fromJson(Gson gson, String json) throws JsonSyntaxException, ClassNotFoundException
-	{
-		try
-		{
+	public <T> T fromJson(Gson gson, String json) throws JsonSyntaxException{
+		try {
 			JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 			JsonElement classElement = jsonObject.get(AUTO_GSON_CLASS);
 			String className = classElement.getAsString();
+			Class<?> clazz = null;
+			try {
+				if(this.classExists(className)) {
+					clazz = Class.forName(className);
+				} else {
+					String refactoredClassName = this.refactored.get(className);
+					if(refactoredClassName != null && this.classExists(refactoredClassName)) {
+						clazz = Class.forName(refactoredClassName);
+					}
+				}
+			} catch (ClassNotFoundException e) {}
+
+			if(clazz == null) {
+				return null;
+			}
+			
 			jsonObject.remove(AUTO_GSON_CLASS);
-			Class<?> clazz = Class.forName(className);
 			Object fromJsonGeneric = gson.fromJson(jsonObject, clazz);
 			T fromJson = (T) fromJsonGeneric;
 			return fromJson;
-		}
-		catch(JsonSyntaxException ex)
-		{
+		} catch(JsonSyntaxException ex) {
 			throw(ex);
+		}
+	}
+	
+	private boolean classExists(String className) {
+		try {
+			Class.forName(className);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+	
+	public static class Builder {
+		
+		private Map<String, String> refactored;
+		
+		public Builder() {
+			this.refactored = new HashMap<>();
+		}
+		
+		public Builder addRefactoredClass(String mapFrom, String mapTo) {
+			this.refactored.put(mapFrom, mapTo);
+			return this;
+		}
+		
+		public AutoGson build() {
+			return new AutoGson(refactored);
 		}
 	}
 }

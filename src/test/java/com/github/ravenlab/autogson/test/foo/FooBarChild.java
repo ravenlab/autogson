@@ -7,20 +7,18 @@ public class FooBarChild extends FooBar {
 
 	private String fooBar;
 	private ExtraFooData<String> fooData;
-	public FooBarChild()
-	{
+	
+	public FooBarChild() {
 		super();
 		this.fooBar = "foobar";
 		this.fooData = new ExtraFooData<>("somedata", "someotherdata");
 	}
 
-	public String getFooBar()
-	{
+	public String getFooBar() {
 		return this.fooBar;
 	}
 	
-	public FooData<String> getData()
-	{
+	public FooData<String> getData() {
 		return this.fooData;
 	}
 }
