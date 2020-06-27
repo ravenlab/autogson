@@ -15,10 +15,10 @@ You will need [gson](https://github.com/google/gson) in your class path as autog
 //Create a gson instance
 
 //To get json
-String json = AutoGson.toJson(gson, object);
+String json = new AutoGson.Builder().build().toJson(gson, object);
 	
 //From json
-FooBar bar = AutoGson.fromJson(gson, json);
+FooBar bar = new AutoGson.Builder().build().fromJson(gson, json);
 ```
 
 ### Gradle
