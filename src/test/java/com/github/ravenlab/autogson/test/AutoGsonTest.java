@@ -69,8 +69,7 @@ public class AutoGsonTest {
 	}
 	
 	@Test
-	public void testInnerCustomClass()
-	{
+	public void testInnerCustomClass() {
 		FooBar child = new FooBarChild();
 		Gson gson = new Gson();
 		AutoGson autoGson = new AutoGson.Builder().build();
