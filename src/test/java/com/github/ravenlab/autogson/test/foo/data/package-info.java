@@ -1,1 +1,0 @@
-package com.github.ravenlab.autogson.test.foo.data;
