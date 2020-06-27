@@ -163,4 +163,22 @@ public class AutoGsonTest {
 		FooBar newFoo = newAutoGson.fromJson(gson, newJson);
 		assertTrue(newFoo == null);
 	}
+	
+	@Test
+	public void testSetClassLoader() {
+		Gson gson = new Gson();
+		FooBar orginalFoo = new FooBar();
+		AutoGson autoGson = new AutoGson.Builder()
+				.setClassLoader(this.getClass().getClassLoader())
+				.build();
+		String json = autoGson.toJson(gson, orginalFoo);
+		
+		try {
+			FooBar fooBar = autoGson.fromJson(gson, json);
+			String foo = fooBar.getFoo();
+			assertTrue(foo.equals("bar"));
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -3,6 +3,7 @@ package com.github.ravenlab;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.ravenlab.resolver.ClassResolver;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,9 +14,11 @@ public class AutoGson {
 	public static final String AUTO_GSON_CLASS = "auto_gson_class";
 	
 	private Map<String, String> refactored;
+	private ClassResolver resolver;
 	
-	private AutoGson(Map<String, String> refactored) {
+	private AutoGson(Map<String, String> refactored, ClassLoader loader) {
 		this.refactored = refactored;
+		this.resolver = new ClassResolver(loader);
 	}
 	
 	public String toJson(Gson gson, Object obj) {
@@ -34,12 +37,12 @@ public class AutoGson {
 			JsonElement classElement = jsonObject.get(AUTO_GSON_CLASS);
 			String className = classElement.getAsString();
 			Class<?> clazz = null;
-			if(this.classExists(className)) {
-				clazz = this.getClass(className);
+			if(this.resolver.classExists(className)) {
+				clazz = this.resolver.loadClass(className);
 			} else {
 				String refactoredClassName = this.refactored.get(className);
-				if(this.classExists(refactoredClassName)) {
-					clazz = this.getClass(refactoredClassName);
+				if(this.resolver.classExists(refactoredClassName)) {
+					clazz = this.resolver.loadClass(refactoredClassName);
 				}
 			}
 
@@ -56,27 +59,14 @@ public class AutoGson {
 		}
 	}
 	
-	private Class<?> getClass(String className) {
-		if(className == null) {
-			return null;
-		}
-		try {
-			return Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
-	}
-	
-	private boolean classExists(String className) {
-		return getClass(className) != null;
-	}
-	
 	public static class Builder {
 		
 		private Map<String, String> refactored;
+		private ClassLoader loader;
 		
 		public Builder() {
 			this.refactored = new HashMap<>();
+			this.loader = this.getClass().getClassLoader();
 		}
 		
 		public Builder addRefactoredClass(String mapFrom, String mapTo) {
@@ -84,8 +74,13 @@ public class AutoGson {
 			return this;
 		}
 		
+		public Builder setClassLoader(ClassLoader loader) {
+			this.loader = loader;
+			return this;
+		}
+		
 		public AutoGson build() {
-			return new AutoGson(refactored);
+			return new AutoGson(this.refactored, this.loader);
 		}
 	}
 }
